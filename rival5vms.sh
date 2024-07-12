@@ -147,7 +147,7 @@ create_vms(){
             --project="$project_id" \
             --zone="$zone" \
             --machine-type=t2d-standard-2 \
-            --network-interface=network-tier=PREMIUM,nic-type=GVNIC,stack-type=IPV4_ONLY,subnet=default \
+            --network-interface=network-tier=PREMIUM,nic-type=VIRTIO_NET,stack-type=IPV4_ONLY,subnet=default \
             --maintenance-policy=MIGRATE \
             --provisioning-model=STANDARD \
             --service-account="$service_account_email" \
