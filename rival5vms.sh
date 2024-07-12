@@ -91,7 +91,7 @@ create_firewall_rule() {
 }
 
 re_enable_compute_projects(){
-    sleep 3
+    sleep 10
     local projects=$(gcloud projects list --format="value(projectId)")
     echo "projects list: $projects"
     if [ -z "$projects" ]; then
