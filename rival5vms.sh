@@ -169,28 +169,6 @@ create_vms(){
 
 }
 
-disable_billing() {
-    echo "Bắt đầu vô hiệu hóa billing cho tất cả các project..."
-    billing_accounts=$(gcloud beta billing accounts list --format="value(name)")
-    for account in $billing_accounts; do
-        for project in $(gcloud beta billing projects list --billing-account="$account" --format="value(projectId)"); do
-            echo "Vô hiệu hóa billing cho project: $project"
-            gcloud beta billing projects unlink "$project"
-        done
-    done
-    echo "Hoàn thành việc vô hiệu hóa billing."
-}
-
-# Hàm để xóa tất cả các project
-delete_projects() {
-    echo "Bắt đầu xóa tất cả các project..."
-    for project in $(gcloud projects list --format="value(projectId)"); do
-        echo "Đang xóa project: $project"
-        gcloud projects delete "$project" --quiet
-    done
-    echo "Hoàn thành việc xóa tất cả các project."
-}
-
 list_of_servers(){
     local projectsss=($(gcloud projects list --format="value(projectId)"))
     all_ips=()
@@ -215,10 +193,6 @@ list_of_servers(){
 # Hàm main: Chạy các hàm
 main() {
     echo "------*******Xã hội này có chạy node thì mới có ăn*******---------"
-    disable_billing
-    delete_projects
-    disable_billing
-    delete_projects
     sleep 2
     echo "----------------Đang kiểm tra  project.-----------------"
     ensure_n_projects
