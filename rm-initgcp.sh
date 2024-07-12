@@ -19,4 +19,6 @@ for project in $(gcloud projects list --format="value(projectId)"); do
     gcloud projects delete "$project" --quiet
 done
 echo "Hoàn thành việc xóa tất cả các project."
+echo "Đợi 15s."
+sleep 15
 echo "Tất cả các project đã được xóa và billing đã được vô hiệu hóa."
