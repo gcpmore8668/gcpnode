@@ -75,6 +75,7 @@ ensure_n_projects() {
       fi
       sleep 8
       gcloud alpha billing projects link "$project_id" --billing-account="$billing_account_id"
+      sleep 4
       gcloud config set project "$project_id"
       echo "Đã tạo dự án '$project_name' (ID: $project_id)."
     done
@@ -90,6 +91,7 @@ create_firewall_rule() {
 }
 
 re_enable_compute_projects(){
+    sleep 3
     local projects=$(gcloud projects list --format="value(projectId)")
     echo "projects list: $projects"
     if [ -z "$projects" ]; then
