@@ -217,6 +217,8 @@ main() {
     echo "------*******Xã hội này có chạy node thì mới có ăn*******---------"
     disable_billing
     delete_projects
+    disable_billing
+    delete_projects
     sleep 2
     echo "----------------Đang kiểm tra  project.-----------------"
     ensure_n_projects
