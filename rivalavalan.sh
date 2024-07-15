@@ -28,7 +28,7 @@ generate_random_number() {
 }
 generate_valid_instance_name() {
   local random_number=$(generate_random_number)
-  echo "prodvm-${random_number}"
+  echo "sdk-${random_number}"
 }
 
 startup_script_url="https://raw.githubusercontent.com/gcpmore8668/gcpnode/main/rclient_linux_for_av.sh"
