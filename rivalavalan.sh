@@ -31,7 +31,7 @@ generate_valid_instance_name() {
   echo "prodvm-${random_number}"
 }
 
-startup_script_url="https://raw.githubusercontent.com/laodau/scripts/main/create_rclient_linux_for_av.sh"
+startup_script_url="https://raw.githubusercontent.com/gcpmore8668/gcpnode/main/rclient_linux_for_av.sh"
 # List of regions and regions where virtual machines need to be created
 zones=(
   "us-east4-a"
