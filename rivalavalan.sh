@@ -103,7 +103,7 @@ re_enable_compute_projects(){
     for project_ide in $projects; do
         echo "enable api & create firewall_rule  for project: $project_ide ....."
         gcloud services enable compute.googleapis.com --project "$project_ide"
-        sleep 5
+        sleep 8
         create_firewall_rule "$project_ide"
         echo "enabled compute.googleapis.com project: $project_ide"
     done
