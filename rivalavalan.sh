@@ -82,7 +82,7 @@ ensure_n_projects() {
       sleep 8
       gcloud alpha billing projects link "$project_id" --billing-account="$billing_account_id"
       gcloud config set project "$project_id"
-      echo "${ORANGE}Đã tạo dự án '$project_name' (ID: $project_id).${NC}"
+      echo -e "${ORANGE}Đã tạo dự án '$project_name' (ID: $project_id).${NC}"
       sleep 2
     done
   else
