@@ -67,7 +67,8 @@ if [ $? -ne 0 ]; then
     echo -e "${GREEN}Failed to install rivalz-node-cli${NC}"
     exit 1
 fi
-
+rivalz update-version
+sleep 20
 # Step 6: Run rivalz run with expect script
 echo -e "${GREEN}Running rivalz run...${NC}"
 
