@@ -47,11 +47,11 @@ zones=(
 )
 # Kiểm tra sự tồn tại của tổ chức
 organization_id=$(gcloud organizations list --format="value(ID)" 2>/dev/null)
-echo "${YELLOW}ID tổ chức của bạn là: $organization_id ${NC}"
+echo -e "${YELLOW}ID tổ chức của bạn là: $organization_id ${NC}"
 
 # Lấy ID tài khoản thanh toán
 billing_account_id=$(gcloud beta billing accounts list --format="value(name)" | head -n 1)
-echo "${YELLOW} Billing_account_id của bạn là: $billing_account_id ${NC}"
+echo -e "${YELLOW} Billing_account_id của bạn là: $billing_account_id ${NC}"
 
 # Hàm đảm bảo có đủ số lượng dự án
 ensure_n_projects() {
@@ -66,7 +66,7 @@ ensure_n_projects() {
 
   if [ "$current_projects" -lt "$desired_projects" ]; then
     projects_to_create=$((desired_projects - current_projects))
-    echo "${RED} Chưa có đủ $desired_projects dự án, đang tiến hành tạo $projects_to_create dự án...${NC}"
+    echo -e "${RED} Chưa có đủ $desired_projects dự án, đang tiến hành tạo $projects_to_create dự án...${NC}"
 
     for ((i = 0; i < projects_to_create; i++)); do
       local project_id=$(generate_project_id)
@@ -86,7 +86,7 @@ ensure_n_projects() {
       sleep 2
     done
   else
-    echo "${ORANGE}Đã có đủ $desired_projects dự án.${NC}"
+    echo -e "${ORANGE}Đã có đủ $desired_projects dự án.${NC}"
   fi
 }
 
@@ -99,17 +99,17 @@ create_firewall_rule() {
 re_enable_compute_projects(){
     sleep 4
     local projects=$(gcloud projects list --format="value(projectId)")
-    echo "${ORANGE}projects list ${NC}: $projects"
+    echo -e "${ORANGE}projects list ${NC}: $projects"
     if [ -z "$projects" ]; then
-        echo "${RED}The account has no projects.${NC}. ${ORANGE} Run lại script vừa chạy.  ${NC}"
+        echo -e "${RED}The account has no projects.${NC}. ${ORANGE} Run lại script vừa chạy.  ${NC}"
         exit 1
     fi
     for project_ide in $projects; do
-        echo "${BLUE} enable api & create firewall_rule  for project: $project_ide .....${NC}"
+        echo -e "${BLUE} enable api & create firewall_rule  for project: $project_ide .....${NC}"
         gcloud services enable compute.googleapis.com --project "$project_ide"
         sleep 8
         create_firewall_rule "$project_ide"
-        echo "${BLUE}enabled compute.googleapis.com project: $project_ide ${NC}"
+        echo -e "${BLUE}enabled compute.googleapis.com project: $project_ide ${NC}"
     done
 }
 
@@ -117,15 +117,15 @@ re_enable_compute_projects(){
 check_service_enablement() {
     local project_id="$1"
     local service_name="compute.googleapis.com"
-    echo "${ORANGE}Đang kiểm tra trạng thái của dịch vụ $service_name trong dự án : $project_id...${NC}"
+    echo -e "${ORANGE}Đang kiểm tra trạng thái của dịch vụ $service_name trong dự án : $project_id...${NC}"
 
     while true; do
         service_status=$(gcloud services list --enabled --project "$project_id" --filter="NAME:$service_name" --format="value(NAME)")
         if [[ "$service_status" == "$service_name" ]]; then
-            echo "${BLUE}Dịch vụ $service_name đã được enable trong dự án : $project_id.${NC}"
+            echo -e "${BLUE}Dịch vụ $service_name đã được enable trong dự án : $project_id.${NC}"
             break
         else
-            echo "${RED}Dịch vụ $service_name chưa được enable trong dự án : $project_id. Đang cố gắng enable...${NC}"
+            echo -e "${RED}Dịch vụ $service_name chưa được enable trong dự án : $project_id. Đang cố gắng enable...${NC}"
             gcloud services enable "$service_name" --project "$project_id"
             sleep 8
         fi
@@ -142,11 +142,11 @@ run_enable_project_apicomputer(){
 create_vms(){
     local projects=$(gcloud projects list --format="value(projectId)")
     for project_id in $projects; do
-        echo "${ORANGE}processing create vm on project-id: $project_id ${NC}"
+        echo -e "${ORANGE}processing create vm on project-id: $project_id ${NC}"
         gcloud config set project "$project_id"
         service_account_email=$(gcloud iam service-accounts list --project="$project_id" --format="value(email)" | head -n 1)
         if [ -z "$service_account_email" ]; then
-            echo "${RED}No Service Account could be found in the project: $project_id ${NC}"
+            echo -e "${RED}No Service Account could be found in the project: $project_id ${NC}"
             continue
         fi
         for zone in "${zones[@]}"; do
@@ -168,9 +168,9 @@ create_vms(){
             --metadata=startup-script-url="$startup_script_url" \
             --reservation-affinity=any
             if [ $? -eq 0 ]; then
-                echo "${ORANGE}Created instance $instance_name in project $project_id at region $zone sucessfully.${NC}"
+                echo -e "${ORANGE}Created instance $instance_name in project $project_id at region $zone sucessfully.${NC}"
             else
-                echo "${RED}Fail create instance $instance_name in project $project_id at region $zone.${NC}"
+                echo -e "${RED}Fail create instance $instance_name in project $project_id at region $zone.${NC}"
             fi
         done
     done
@@ -182,7 +182,7 @@ list_of_servers(){
     all_ips=()
     # Lặp qua từng dự án và lấy danh sách các địa chỉ IP công cộng
     for projects_id in "${projectsss[@]}"; do
-        echo "${BLUE}Retrieving list of servers from project: $projects_id ${NC}"       
+        echo -e "${BLUE}Retrieving list of servers from project: $projects_id ${NC}"       
         # Đặt dự án hiện tại
         gcloud config set project "$projects_id"      
         # Lấy danh sách địa chỉ IP công cộng của các máy chủ trong dự án hiện tại
@@ -190,7 +190,7 @@ list_of_servers(){
         # Thêm các địa chỉ IP vào mảng all_ips
         all_ips+=("${ips[@]}")
     done
-    echo "${YELLOW}List of all public IP addresses: ${NC}"
+    echo -e "${YELLOW}List of all public IP addresses: ${NC}"
     for ip in "${all_ips[@]}"; do
         echo "$ip"
     done
@@ -200,17 +200,17 @@ list_of_servers(){
 # Gọi hàm để đảm bảo có đủ số lượng dự án
 # Hàm main: Chạy các hàm
 main() {
-    echo "${YELLOW}-------------------*******THIÊN BỒNG NGUYÊN SOÁI*******------------------${NC}"
+    echo -e "${YELLOW}-------------------*******THIÊN BỒNG NGUYÊN SOÁI*******------------------${NC}"
     sleep 1
-    echo "${YELLOW}///////////////////*******DÁI BÉ TÍ HON*******//////////////////${NC}"
-    echo "${RED}----------------Híp d â m chị ....-----------------${NC}"
+    echo -e "${YELLOW}///////////////////*******DÁI BÉ TÍ HON*******//////////////////${NC}"
+    echo -e "${RED}----------------Híp d â m chị ....-----------------${NC}"
     ensure_n_projects
-    echo "${YELLOW}----------------Kiểm tra xong số lượng project.-----------------${NC}"
+    echo -e "${YELLOW}----------------Kiểm tra xong số lượng project.-----------------${NC}"
     re_enable_compute_projects
     run_enable_project_apicomputer
-    echo "${YELLOW}----------------Tiến hành tạo VM......-------------${NC}"
+    echo -e "${YELLOW}----------------Tiến hành tạo VM......-------------${NC}"
     create_vms
     list_of_servers
-    echo "${BLUE}Done - Trên là danh sách VM${NC}"
+    echo -e "${BLUE}Done - Trên là danh sách VM${NC}"
 }
 main
