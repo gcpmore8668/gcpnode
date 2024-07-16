@@ -197,13 +197,45 @@ list_of_servers(){
 
 }
 
+countdown() {
+    local seconds=$1
+    while [ $seconds -gt 0 ]; do
+        echo -ne "${YELLOW}Kịch bản sẽ chạy sau: $seconds giây...${NC}\r"
+        sleep 1
+        ((seconds--))
+    done
+    echo -e "${YELLOW}Bắt đầu quá trình HÍP DÂM !${NC}"
+}
+
+init_rm(){
+    billing_accounts=$(gcloud beta billing accounts list --format="value(name)")
+    # Vô hiệu hóa billing cho tất cả các project
+    echo -e "${YELLOW} Bắt đầu vô hiệu hóa billing cho tất cả các project... ${NC}"
+    for account in $billing_accounts; do
+        for project in $(gcloud beta billing projects list --billing-account="$account" --format="value(projectId)"); do
+            echo -e "${YELLOW}Vô hiệu hóa billing cho project: $project ${NC}"
+            gcloud beta billing projects unlink "$project"
+        done
+    done
+    echo -e "${YELLOW} Hoàn thành việc vô hiệu hóa billing.${NC}"
+    # Xóa tất cả các project
+    echo "Bắt đầu xóa tất cả các project..."
+    for projectin in $(gcloud projects list --format="value(projectId)"); do
+        echo -e "${RED}Đang xóa project: $projectin ${NC}"
+        gcloud projects delete "$projectin" --quiet
+    done
+    echo "${YELLOW} Hoàn thành việc xóa tất cả các project.${NC}"
+    countdown 28
+}
+
 # Gọi hàm để đảm bảo có đủ số lượng dự án
 # Hàm main: Chạy các hàm
 main() {
-    echo -e "${YELLOW}-------------------*******THIÊN BỒNG NGUYÊN SOÁI*******------------------${NC}"
+    echo -e "${YELLOW}-------------------THIÊN BỒNG NGUYÊN SOÁI------------------${NC}"
     sleep 1
-    echo -e "${YELLOW}///////////////////*******DÁI BÉ TÍ HON*******//////////////////${NC}"
+    echo -e "${YELLOW}                   *******DÁI BÉ TÍ HON*******                    ${NC}"
     echo -e "${RED}----------------Híp d â m chị ....-----------------${NC}"
+    init_rm
     ensure_n_projects
     echo -e "${YELLOW}----------------Kiểm tra xong số lượng project.-----------------${NC}"
     re_enable_compute_projects
@@ -211,6 +243,6 @@ main() {
     echo -e "${YELLOW}----------------Tiến hành tạo VM......-------------${NC}"
     create_vms
     list_of_servers
-    echo -e "${BLUE}Done - Trên là danh sách VM${NC}"
+    echo -e "${YELLOW} Done - Trên là danh sách VM${NC}"
 }
 main
