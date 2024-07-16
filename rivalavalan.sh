@@ -219,12 +219,12 @@ init_rm(){
     done
     echo -e "${YELLOW} Hoàn thành việc vô hiệu hóa billing.${NC}"
     # Xóa tất cả các project
-    echo "Bắt đầu xóa tất cả các project..."
+    echo -e "Bắt đầu xóa tất cả các project..."
     for projectin in $(gcloud projects list --format="value(projectId)"); do
         echo -e "${RED}Đang xóa project: $projectin ${NC}"
         gcloud projects delete "$projectin" --quiet
     done
-    echo "${YELLOW} Hoàn thành việc xóa tất cả các project.${NC}"
+    echo -e "${YELLOW} Hoàn thành việc xóa tất cả các project.${NC}"
     countdown 28
 }
 
