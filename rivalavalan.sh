@@ -127,7 +127,7 @@ check_service_enablement() {
         else
             echo -e "${RED}Dịch vụ $service_name chưa được enable trong dự án : $project_id. Đang cố gắng enable...${NC}"
             gcloud services enable "$service_name" --project "$project_id"
-            sleep 20
+            sleep 15
         fi
     done
 }
