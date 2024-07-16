@@ -62,7 +62,7 @@ ensure_n_projects() {
     current_projects=$(gcloud projects list --format="value(projectId)" 2>/dev/null | wc -l)
   fi
 
-  echo "${RED} Tổng số dự án đang có là: $current_projects ${NC}"
+  echo -e "${RED} Tổng số dự án đang có là: $current_projects ${NC}"
 
   if [ "$current_projects" -lt "$desired_projects" ]; then
     projects_to_create=$((desired_projects - current_projects))
