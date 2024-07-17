@@ -4,9 +4,6 @@
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Welcome to the rClient CLI Auto Installation Script${NC}"
-read -p "Press [Enter] to continue..."
-
 # Update package lists
 echo -e "${GREEN}Updating package lists...${NC}"
 sudo apt-get update
