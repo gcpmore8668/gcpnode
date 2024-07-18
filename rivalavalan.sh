@@ -42,7 +42,7 @@ zones=(
   "us-east1-b"
   "us-east5-a"
   "us-south1-a"
-  "us-west1-a"
+  "europe-west2-c"
   "europe-west4-b"
 )
 # Kiểm tra sự tồn tại của tổ chức
