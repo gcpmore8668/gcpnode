@@ -41,9 +41,10 @@ zones=(
   "us-east4-a"
   "us-east1-b"
   "us-east5-a"
-  "us-south1-a"
-  "us-west1-a"
+  "europe-west2-c"
   "europe-west4-b"
+  "europe-west10-a"
+  "europe-west3-c"
 )
 # Kiểm tra sự tồn tại của tổ chức
 organization_id=$(gcloud organizations list --format="value(ID)" 2>/dev/null)
