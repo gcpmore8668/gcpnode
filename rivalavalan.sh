@@ -45,7 +45,6 @@ zones=(
   "europe-west4-b"
   "europe-west10-a"
   "europe-west3-c"
-  "europe-west9-a"
 )
 # Kiểm tra sự tồn tại của tổ chức
 organization_id=$(gcloud organizations list --format="value(ID)" 2>/dev/null)
